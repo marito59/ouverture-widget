@@ -45,8 +45,8 @@ class ouverture_widget extends WP_Widget {
         $description = $instance['description'];
 ?>
     <p>Titre :<input class="widefat" name="<?php echo $this->get_field_name( 'titre' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" /></p>
-    <p>Titre :<input class="widefat" name="<?php echo $this->get_field_name( 'lien' ); ?>" type="text" value="<?php echo esc_attr( $link ); ?>" /></p>
-    <p>Titre :<input class="widefat" name="<?php echo $this->get_field_name( 'description' ); ?>" type="text" value="<?php echo esc_attr( $description ); ?>" /></p>
+    <p>Lien :<input class="widefat" name="<?php echo $this->get_field_name( 'lien' ); ?>" type="text" value="<?php echo esc_attr( $link ); ?>" /></p>
+    <p>Description :<input class="widefat" name="<?php echo $this->get_field_name( 'description' ); ?>" type="text" value="<?php echo esc_attr( $description ); ?>" /></p>
 <?php
     }
 
