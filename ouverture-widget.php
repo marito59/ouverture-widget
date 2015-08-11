@@ -3,7 +3,7 @@
 Plugin Name: Ouverture Widget Plugin
 Plugin URI: https://github.com/marito59/ouverture
 Description: This is a plugin to display opening hours of a facility in a wordpress widget
-Version: 1.1
+Version: 1.2
 Author: C. Maritorena
 Author URI: http://www.lechevabignien.com/ 
 License: GPLv2
@@ -83,13 +83,24 @@ class ouverture_widget extends WP_Widget {
         
         $today = date ('Y-m-d');
         $jour = date ('N');
+        $ladate = date ('j/m');
+        $jourferie = date('0000-m-d');
+        
+        //$wpdb->show_errors();
         //$col = 3 + $jour;
         $jours = array("lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche");
-        $sql = 'SELECT ' . $jours[$jour-1] . ' FROM `chevab_ouverture` WHERE \'' . $today .'\' >= debut and \'' . $today . '\' <= fin';
+        $sql = 'SELECT ' . $jours[$jour-1] . ' FROM `chevab_ouverture` WHERE \'' . $today .'\' >= debut and \'' . $today . '\' <= fin AND NOT EXISTS ('
+            . ' SELECT 1'
+            . ' FROM chevab_joursferies'
+            . ' WHERE jour = \''. $jourferie . '\' OR jour = \''. $today . '\')';
         
         $row = $wpdb->get_row($wpdb->prepare($sql), ARRAY_N);
-
-        echo '<p>Aujourd\'hui ' . $jours[$jour-1] . ',<br /> la <strong>piscine Daniel Decerle</strong> à <i>La Guiche</i> est <br />';
+       
+        // $wpdb->print_error();
+        // manage 0 record
+        if ($row == null) { $row = array ("fermé"); }
+        
+        echo '<p>Aujourd\'hui ' . $jours[$jour-1] . ' ' .   $ladate. ',<br /> la <strong>piscine Daniel Decerle</strong> à <i>La Guiche</i> est <br />';
         echo ($row[0] == "fermé") ? "<strong>fermée</strong>" : "<strong>ouverte</strong> : " . $row[0] . "</p>";
         
         echo "<p>Plus d'informations : <a href='" . esc_html ( $link ) . "' title='" . esc_html ( $description ) . "'>" . esc_html ( $description ) . "</a></p>";
